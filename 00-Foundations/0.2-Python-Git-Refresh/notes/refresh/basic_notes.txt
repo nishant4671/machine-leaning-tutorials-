@@ -1,0 +1,253 @@
+From *this specific lesson*, you have covered the major foundational topics already.
+But there are still a few smaller but important pieces connected to today’s lesson that naturally fit here before moving ahead.
+
+---
+
+# Remaining Topics From THIS Lesson
+
+---
+
+# 1. `__init__.py`
+
+VERY important for Python project structure.
+
+You’ll see this everywhere.
+
+Example:
+
+```text id="k2opg4"
+app/
+├── __init__.py
+├── models.py
+└── utils.py
+```
+
+It tells Python:
+
+> “Treat this folder like a Python package/module.”
+
+Important later for:
+
+* imports,
+* project structure,
+* FastAPI,
+* ML apps.
+
+---
+
+# 2. Absolute vs Relative Imports
+
+Example:
+
+```python id="wr2p4m"
+from app.models import User
+```
+
+vs
+
+```python id="8m9yja"
+from .models import User
+```
+
+VERY important in large projects.
+
+---
+
+# 3. `requirements.txt` vs `pyproject.toml`
+
+You learned modern approach (`pyproject.toml`).
+
+Still remaining:
+
+* why older projects use `requirements.txt`
+* difference between them
+* when both are used together.
+
+---
+
+# 4. What Happens During `pip install`
+
+You used:
+
+```bash id="4pn3z4"
+pip install ruff
+```
+
+But we haven’t deeply covered:
+
+* what pip actually does,
+* where packages install,
+* how virtual env isolation works internally.
+
+---
+
+# 5. Package Managers
+
+Tiny overview still remaining:
+
+* pip
+* uv
+* poetry
+
+Why modern Python ecosystem has multiple tools.
+
+---
+
+# 6. Semantic Versioning
+
+Example:
+
+```text id="b4m0m3"
+1.2.0
+```
+
+Meaning:
+
+* major,
+* minor,
+* patch versions.
+
+Important in dependencies.
+
+---
+
+# 7. GitHub vs Git
+
+You learned Git.
+
+Still remaining:
+
+* difference between Git and GitHub,
+* local repo vs remote repo,
+* what `origin` means.
+
+---
+
+# 8. `git push` and `git pull`
+
+You saw them briefly.
+
+Still remaining:
+
+* syncing with remote repositories,
+* collaboration flow.
+
+---
+
+# 9. HEAD in Git
+
+You may hear:
+
+```text id="vn7rwe"
+HEAD
+```
+
+VERY common Git term.
+
+It means:
+
+> “current commit/position.”
+
+---
+
+# 10. Merge vs Rebase
+
+Advanced-ish Git topic.
+
+Not urgent now,
+but naturally connected.
+
+---
+
+# 11. Ruff Formatting vs Linting
+
+We touched this, but not deeply.
+
+Difference between:
+
+* checking style,
+* automatically fixing style,
+* detecting logic issues.
+
+---
+
+# 12. What Happens During PR Review
+
+Still remaining:
+
+* CI checks,
+* automated testing,
+* review approvals,
+* merge protection rules.
+
+---
+
+# 13. Branch Naming Conventions
+
+Example:
+
+```text id="myj2w4"
+feature/login
+bugfix/auth
+hotfix/payment
+experiment/model-v2
+```
+
+Professional repo conventions.
+
+---
+
+# 14. README.md
+
+VERY important professional skill.
+
+Every serious repo has one.
+
+Contains:
+
+* project explanation,
+* setup instructions,
+* usage examples.
+
+---
+
+# 15. Basic Open Source Workflow
+
+Natural extension of PRs:
+
+* fork,
+* clone,
+* branch,
+* PR to external repo.
+
+---
+
+# Most Important Remaining Ones
+
+If I had to prioritize what’s still important from THIS lesson:
+
+1. GitHub vs Git
+2. push/pull/origin
+3. `__init__.py`
+4. imports deeply
+5. pip + virtual env internals
+6. README.md
+7. requirements.txt vs pyproject.toml
+
+Those complete the “professional Python project basics” layer.
+
+---
+
+# Current State
+
+You now understand:
+
+* WHY these tools exist,
+* HOW they work,
+* HOW teams use them,
+* HOW modern Python projects are structured.
+
+That’s the real goal of this lesson.
+
+Most beginners only memorize commands.
+You’re building system-level understanding.
