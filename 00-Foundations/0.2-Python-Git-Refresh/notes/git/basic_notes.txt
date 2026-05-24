@@ -1,0 +1,1017 @@
+# Git, Branching, PRs, Ruff, pre-commit & Project Structure Notes
+
+## Production Engineering Foundations for ML & Software Development
+
+These notes heavily focus on:
+
+* how Git ACTUALLY works,
+* what branches REALLY are,
+* how PRs work in real teams,
+* how Ruff/pre-commit work internally,
+* and the complete engineering workflow.
+
+This is the stuff beginners usually “use blindly.”
+You’re trying to understand the system itself — which is exactly correct.
+
+---
+
+# 1. What Git REALLY Is
+
+Most beginners think:
+
+> “Git stores code.”
+
+Not exactly.
+
+Git stores:
+
+# snapshots of your project over time.
+
+---
+
+# Mental Model
+
+Imagine a game save system.
+
+Every save point:
+
+* remembers files,
+* remembers changes,
+* lets you go back safely.
+
+Git works similarly.
+
+---
+
+# Visual
+
+```text
+Version 1 ---> Version 2 ---> Version 3
+```
+
+Git tracks:
+
+* what changed,
+* when,
+* who changed it.
+
+---
+
+# Why Git Exists
+
+Without Git:
+
+* accidental deletions,
+* overwritten files,
+* impossible collaboration,
+* no history,
+* no rollback.
+
+Git solves this.
+
+---
+
+# 2. Core Git Workflow
+
+This is the MOST important workflow to memorize.
+
+---
+
+# Step 1 — Modify Files
+
+You edit code.
+
+Example:
+
+```python
+print("hello")
+```
+
+---
+
+# Step 2 — Stage Changes
+
+```bash
+git add .
+```
+
+Meaning:
+
+> “Git, prepare these changes for snapshot.”
+
+---
+
+# Step 3 — Commit
+
+```bash
+git commit -m "added greeting"
+```
+
+Meaning:
+
+> “Create permanent snapshot with message.”
+
+---
+
+# Visual
+
+```text
+Working Files
+      ↓
+git add
+      ↓
+Staging Area
+      ↓
+git commit
+      ↓
+Git History
+```
+
+---
+
+# VERY Important Concept
+
+`git add`
+does NOT save permanently.
+
+`git commit`
+creates actual history snapshot.
+
+---
+
+# Example
+
+```bash
+git add app.py
+git commit -m "fixed login bug"
+```
+
+Now Git remembers this forever.
+
+---
+
+# 3. What is `.git` Folder?
+
+When you run:
+
+```bash
+git init
+```
+
+Git creates:
+
+```text
+.git/
+```
+
+Hidden folder.
+
+---
+
+# This Folder Stores
+
+* history,
+* commits,
+* branches,
+* metadata,
+* tracking info.
+
+---
+
+# IMPORTANT
+
+Deleting `.git`
+removes Git history completely.
+
+---
+
+# 4. Understanding Branches Deeply
+
+This is one of the MOST misunderstood concepts.
+
+---
+
+# What Beginners Think
+
+> “Branch = copy of project.”
+
+Not exactly.
+
+A branch is more like:
+
+# an independent timeline.
+
+---
+
+# Visual
+
+```text
+main
+  |
+  |---- feature/login
+```
+
+---
+
+# Main Branch
+
+Usually:
+
+```text
+main
+```
+
+contains:
+
+* stable,
+* production-ready code.
+
+---
+
+# Why Branches Exist
+
+Suppose:
+
+* Developer A adds login
+* Developer B redesigns UI
+* Developer C fixes bugs
+
+Without branches:
+💥 everyone edits same code directly.
+
+Chaos.
+
+---
+
+# Branch Solves This
+
+Each developer gets isolated workspace.
+
+---
+
+# Create Branch
+
+```bash
+git checkout -b feature/login
+```
+
+Meaning:
+
+| Part            | Meaning           |
+| --------------- | ----------------- |
+| `checkout`      | switch branch     |
+| `-b`            | create new branch |
+| `feature/login` | branch name       |
+
+---
+
+# What Happens Internally?
+
+Git creates:
+
+* new timeline pointer.
+
+Both branches initially identical.
+
+---
+
+# Visual
+
+```text
+main
+  |
+  └── feature/login
+```
+
+---
+
+# Then You Add Commits
+
+```text
+main
+  |
+  └── feature/login
+          |
+          └── commit
+          └── commit
+```
+
+Now branch evolves separately.
+
+---
+
+# VERY Important Insight
+
+Branches are CHEAP in Git.
+
+Git does NOT duplicate whole project.
+
+It mainly tracks changes efficiently.
+
+---
+
+# Real ML Example
+
+You want to test:
+
+* new model,
+* new preprocessing,
+* experimental pipeline.
+
+Create branch:
+
+```bash
+git checkout -b experiment/new-tokenizer
+```
+
+Safe experimentation.
+
+---
+
+# 5. Switching Branches
+
+---
+
+# See Branches
+
+```bash
+git branch
+```
+
+Example:
+
+```text
+* main
+  feature/login
+```
+
+`*` means current branch.
+
+---
+
+# Switch Branch
+
+```bash
+git checkout main
+```
+
+Now working on main again.
+
+---
+
+# 6. Merging Branches
+
+Suppose:
+
+* feature finished,
+* tested,
+* ready.
+
+Merge into main.
+
+---
+
+# Step 1
+
+Switch to main:
+
+```bash
+git checkout main
+```
+
+---
+
+# Step 2
+
+Merge:
+
+```bash
+git merge feature/login
+```
+
+---
+
+# Visual
+
+BEFORE:
+
+```text
+main
+  \
+   feature/login
+```
+
+AFTER:
+
+```text
+main -------- merged changes
+```
+
+---
+
+# 7. Merge Conflicts
+
+VERY important real-world concept.
+
+---
+
+# Problem
+
+Two developers edit same lines.
+
+Git gets confused.
+
+---
+
+# Example
+
+Developer A:
+
+```python
+name = "Nishant"
+```
+
+Developer B:
+
+```python
+name = "Rahul"
+```
+
+Git asks:
+
+> “Which version should I keep?”
+
+That is merge conflict.
+
+---
+
+# Git Shows
+
+```text
+<<<<<<< HEAD
+name = "Nishant"
+=======
+name = "Rahul"
+>>>>>>> feature-branch
+```
+
+You manually resolve.
+
+---
+
+# 8. Pull Requests (PRs) — Deep Understanding
+
+This is CORE industry workflow.
+
+---
+
+# What Is a PR REALLY?
+
+PR is NOT just:
+
+> “merge my code.”
+
+It is:
+
+# collaborative review system.
+
+---
+
+# Real Workflow
+
+---
+
+# Step 1 — Create Branch
+
+```bash
+git checkout -b feature/auth
+```
+
+---
+
+# Step 2 — Write Code
+
+You build feature.
+
+---
+
+# Step 3 — Commit
+
+```bash
+git add .
+git commit -m "added auth system"
+```
+
+---
+
+# Step 4 — Push to GitHub
+
+```bash
+git push origin feature/auth
+```
+
+---
+
+# Step 5 — Open Pull Request
+
+On GitHub:
+
+```text
+feature/auth ---> main
+```
+
+---
+
+# What GitHub Shows
+
+PR displays:
+
+* changed files,
+* added lines,
+* removed lines,
+* comments,
+* discussions.
+
+---
+
+# Real Example
+
+Reviewer sees:
+
+```diff
+- password = input()
++ password = hash_password(input())
+```
+
+---
+
+# Reviewer Comments
+
+```text
+Please rename this variable.
+```
+
+or
+
+```text
+Security issue here.
+```
+
+---
+
+# You Fix It
+
+Commit again:
+
+```bash
+git add .
+git commit -m "fixed review comments"
+git push
+```
+
+PR updates automatically.
+
+---
+
+# Why PRs Are Important
+
+PRs improve:
+
+* code quality,
+* team learning,
+* architecture,
+* consistency,
+* security.
+
+---
+
+# VERY Important Industry Insight
+
+Most engineering work is:
+
+# reviewing code
+
+not just writing code.
+
+---
+
+# 9. What Is Ruff REALLY?
+
+You asked:
+
+> “Is Ruff a library or what?”
+
+Excellent question.
+
+---
+
+# Ruff is a TOOL
+
+Specifically:
+
+* linter,
+* formatter.
+
+Written in:
+
+* Rust.
+
+---
+
+# It is NOT a normal Python library like NumPy.
+
+You usually run it from terminal.
+
+---
+
+# Install
+
+```bash
+pip install ruff
+```
+
+---
+
+# What is a Linter?
+
+Linter = code inspector.
+
+It checks for:
+
+* mistakes,
+* bad practices,
+* style issues,
+* unused variables,
+* bugs.
+
+---
+
+# Example
+
+```python
+import math
+
+x = 5
+```
+
+Ruff says:
+
+```text
+Unused import 'math'
+```
+
+because:
+
+* imported,
+* never used.
+
+---
+
+# Another Example
+
+BAD:
+
+```python
+x=5
+```
+
+Ruff/formatter may fix to:
+
+```python
+x = 5
+```
+
+---
+
+# Why Teams Need This
+
+Without standardization:
+
+```python
+x=5
+```
+
+```python
+x = 5
+```
+
+```python
+x  =  5
+```
+
+mess everywhere.
+
+---
+
+# Ruff Creates Consistency
+
+Huge benefit for:
+
+* readability,
+* maintenance,
+* PR reviews.
+
+---
+
+# 10. What is pre-commit REALLY?
+
+This is VERY important engineering automation.
+
+---
+
+# Core Idea
+
+Before commit succeeds:
+automatic checks run.
+
+---
+
+# Example Checks
+
+* Ruff
+* formatting
+* tests
+* security scans
+
+---
+
+# Why Needed?
+
+Humans forget things.
+
+Automation catches issues early.
+
+---
+
+# 11. How pre-commit Works Internally
+
+You install:
+
+```bash
+pip install pre-commit
+```
+
+Then:
+
+```bash
+pre-commit install
+```
+
+---
+
+# What Happens?
+
+Git hooks get installed.
+
+---
+
+# What is a Hook?
+
+Hook =
+
+# automatic script triggered by Git event.
+
+---
+
+# Example
+
+```text
+Event occurs ---> automatic action runs
+```
+
+---
+
+# Real Flow
+
+You type:
+
+```bash
+git commit -m "added feature"
+```
+
+Before commit finishes:
+
+```text
+Running Ruff...
+Checking formatting...
+Running tests...
+```
+
+---
+
+# If Problem Found
+
+Commit blocked.
+
+Example:
+
+```text
+ruff................................FAILED
+```
+
+Git refuses commit.
+
+---
+
+# Why This Is AMAZING
+
+Because:
+
+* bad code never enters repo,
+* cleaner history,
+* reviewers happier,
+* fewer bugs.
+
+---
+
+# 12. Real Engineering Workflow
+
+This is VERY close to real industry workflow.
+
+---
+
+# Step 1
+
+Create branch.
+
+```bash
+git checkout -b feature/api
+```
+
+---
+
+# Step 2
+
+Write code.
+
+---
+
+# Step 3
+
+Run checks.
+
+```bash
+ruff check .
+```
+
+---
+
+# Step 4
+
+Commit.
+
+```bash
+git add .
+git commit -m "added API endpoint"
+```
+
+---
+
+# Step 5
+
+pre-commit runs automatically.
+
+---
+
+# Step 6
+
+Push branch.
+
+```bash
+git push origin feature/api
+```
+
+---
+
+# Step 7
+
+Open PR.
+
+---
+
+# Step 8
+
+Team reviews.
+
+---
+
+# Step 9
+
+Fix comments.
+
+---
+
+# Step 10
+
+Merge into main.
+
+---
+
+# 13. Real Repo Structure
+
+Example production project:
+
+```text
+ml-project/
+│
+├── .git/
+├── .venv/
+├── app/
+│   ├── main.py
+│   ├── models.py
+│   └── utils.py
+│
+├── tests/
+│   └── test_main.py
+│
+├── pyproject.toml
+├── .pre-commit-config.yaml
+├── README.md
+└── .gitignore
+```
+
+---
+
+# What Each Part Does
+
+| File/Folder               | Purpose                 |
+| ------------------------- | ----------------------- |
+| `.git/`                   | Git history             |
+| `.venv/`                  | isolated Python env     |
+| `app/`                    | application code        |
+| `tests/`                  | test files              |
+| `pyproject.toml`          | project config          |
+| `.pre-commit-config.yaml` | automation rules        |
+| `README.md`               | project explanation     |
+| `.gitignore`              | files Git should ignore |
+
+---
+
+# 14. `.gitignore`
+
+VERY important.
+
+Some files should NOT enter Git.
+
+Example:
+
+* virtual environments,
+* cache,
+* secrets,
+* temporary files.
+
+---
+
+# Example
+
+```text
+.venv/
+__pycache__/
+.env
+```
+
+---
+
+# Why?
+
+Because:
+
+* huge files,
+* machine-specific,
+* sensitive data.
+
+---
+
+# 15. Mental Model Summary
+
+| Concept    | Real Meaning               |
+| ---------- | -------------------------- |
+| Git        | project history system     |
+| Commit     | saved snapshot             |
+| Branch     | isolated timeline          |
+| Merge      | combine timelines          |
+| PR         | review system              |
+| Ruff       | automated code inspector   |
+| Formatter  | auto-style fixer           |
+| pre-commit | automatic quality gate     |
+| Hook       | automatic triggered script |
+
+---
+
+# SUPER Important Final Insight
+
+Professional engineering is NOT:
+
+> “writing random code quickly.”
+
+It is:
+
+> “building systems safely with teams.”
+
+Git + PRs + Ruff + pre-commit exist to make:
+
+* large systems,
+* many developers,
+* long-term maintenance
+
+possible.
