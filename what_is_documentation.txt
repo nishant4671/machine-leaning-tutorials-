@@ -1,0 +1,92 @@
+This is a fantastic question—and asking it shows you’re already thinking like a real engineer. Let me break it down clearly.
+
+---
+
+## What “Documentation” Actually Means
+
+Documentation is anything that explains your code, your system, your decisions, or your data to a human. It answers questions like:
+
+- *What does this function do?*
+- *How do I run this service?*
+- *Why did we choose Postgres instead of MySQL?*
+- *What should the input look like?*
+- *How accurate is this model?*
+
+It’s the difference between a pile of scripts and a maintainable, professional project.
+
+---
+
+## The Three Levels of Documentation (You’ll Do All of Them)
+
+### 1. Code‑Level Documentation
+This lives right next to your code. It’s for you and other developers.
+
+| Type | Example | Tool |
+|------|---------|------|
+| **Comments** | `# We use log1p transformation because the target is skewed` | Your keyboard |
+| **Docstrings** | A description at the top of every function/class explaining what it does, its parameters, and what it returns. | Python `"""triple quotes"""` |
+| **Type hints** | `def predict(features: list[float]) -> float:` | Python’s `typing` module |
+
+**What it teaches you:** Your future self (and any teammate) can read your code in 3 months and understand it instantly. It also lets AI coding assistants give you much better autocomplete.
+
+---
+
+### 2. Project‑Level Documentation
+This is what people see when they land on your GitHub repo.
+
+| Document | Purpose |
+|----------|---------|
+| **README.md** | The “front door” of your project: what it does, how to install, how to run, how to test, API examples. |
+| **CONTRIBUTING.md** | Rules for how to contribute (branch naming, commit style). |
+| **LICENSE** | Legal terms. |
+| **Architecture Decision Records (ADRs)** | A numbered document for every major tech choice you make. (You’ll write these constantly in the syllabus.) |
+
+**Example ADR title:** *ADR‑003: Use FAISS for nearest‑neighbour retrieval over PostgreSQL pgvector*  
+Inside, you’d explain the context, the options you considered, the decision, and the consequences.
+
+---
+
+### 3. ML‑Specific Documentation
+Because ML systems have data, models, and uncertainty, you need extra documents.
+
+| Document | What It Contains |
+|----------|------------------|
+| **Model Card** | Overview of the model: what it’s for, training data, evaluation metrics, limitations, ethical considerations. (Google introduced these.) |
+| **Data Sheet** | Where the data came from, how it was collected, potential biases. |
+| **Experiment Tracker** | Logs of every training run: parameters, metrics, artifacts. *You’ll use MLflow for this—it auto‑documents your experiments.* |
+| **API Documentation** | FastAPI automatically generates interactive docs at `/docs` with Swagger UI. That’s living documentation. |
+
+---
+
+## Why Everyone Emphasises Documentation
+
+1. **You will forget.** Six months from now, you won’t remember why you used a polynomial degree of 3 instead of 2. An ADR tells you.
+2. **Teams depend on it.** In a company, your code is useless if no one else can run it or understand it.
+3. **It’s a senior engineer signature.** Junior devs write code that works. Senior devs write code that others can **build upon**. Documentation is half of that.
+4. **It makes interviewing 10× stronger.** When an interviewer asks “Tell me about a tough technical decision,” you can walk them through an actual ADR from your project. You’ll sound like a pro.
+5. **It speeds up AI assistants.** When you paste a file with clear docstrings into Copilot, it generates much better, context‑aware code.
+
+---
+
+## How You’ll Practice It in Your Syllabus
+
+- **Every project** ends with a polished `README.md` and at least two ADRs.  
+- **Module 0** teaches you to write docstrings and use type hints on day one.  
+- **Module 2+** you’ll generate model cards and use MLflow’s tracking UI as instant documentation.  
+- **AI Prompt Guide** in your `INDEX.md` includes prompts like:  
+  - *“Write a docstring for this function that explains the input, output, and side effects.”*  
+  - *“Generate a README for this project covering setup, endpoints, and testing instructions.”*
+
+---
+
+## A Quick Mental Model
+
+Think of your project as a car:
+- **Code** is the engine.  
+- **Comments/docstrings** are the labels on the controls.  
+- **README** is the owner’s manual.  
+- **ADRs** are the engineer’s design notes explaining why you used a turbocharger instead of a supercharger.
+
+You wouldn’t sell a car without an owner’s manual. You shouldn’t ship software without documentation.
+
+Documentation is not extra work—it’s part of the product. And you’re about to become excellent at it.
