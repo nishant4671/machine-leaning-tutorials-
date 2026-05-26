@@ -1,0 +1,830 @@
+# Docker Foundations Notes
+
+---
+
+# 1. What Problem Docker Solves
+
+Before Docker:
+
+```text id="d08yy4"
+"Works on my machine"
+```
+
+problem happened constantly.
+
+Different machines had:
+
+* different Python versions
+* missing packages
+* OS differences
+* dependency conflicts
+
+Docker solves this by packaging:
+
+* code
+* dependencies
+* runtime
+* environment
+* startup instructions
+
+into one portable unit.
+
+---
+
+# 2. Core Docker Concepts
+
+---
+
+# Docker Image
+
+## Definition
+
+A Docker image is:
+
+```text id="l0ehjx"
+A read-only blueprint/template used to create containers.
+```
+
+It contains:
+
+* OS layers
+* Python/runtime
+* libraries
+* dependencies
+* app code
+* startup instructions
+
+---
+
+# Mental Models
+
+| Real World        | Docker |
+| ----------------- | ------ |
+| Cake recipe       | Image  |
+| Blueprint         | Image  |
+| Game installation | Image  |
+| Class definition  | Image  |
+
+---
+
+# Important Properties
+
+| Property   | Value |
+| ---------- | ----- |
+| Alive?     | NO    |
+| Executing? | NO    |
+| Stored?    | YES   |
+| Reusable?  | YES   |
+
+---
+
+# Docker Container
+
+## Definition
+
+A container is:
+
+```text id="mjlwmk"
+A running instance created from an image.
+```
+
+Container includes:
+
+* running processes
+* memory
+* filesystem
+* networking
+* ports
+* runtime state
+
+---
+
+# Mental Models
+
+| Real World           | Docker    |
+| -------------------- | --------- |
+| Actual cake          | Container |
+| Running robot        | Container |
+| Running game session | Container |
+| Object from class    | Container |
+
+---
+
+# Image vs Container
+
+| Image          | Container              |
+| -------------- | ---------------------- |
+| Blueprint      | Running instance       |
+| Passive        | Active                 |
+| Stored         | Executing              |
+| Reusable       | Temporary runtime      |
+| Immutable base | Writable runtime layer |
+
+---
+
+# 3. Docker Hub
+
+Docker Hub is the online registry storing images.
+
+Official site:
+
+[Docker Hub](https://hub.docker.com/?utm_source=chatgpt.com)
+
+Examples:
+
+* Python
+* Ubuntu
+* PostgreSQL
+* Redis
+* Node.js
+
+---
+
+# 4. Pulling an Image
+
+---
+
+# Syntax
+
+```bash id="qjlwm8"
+docker pull IMAGE_NAME
+```
+
+Example:
+
+```bash id="rbjlwm"
+docker pull python:3.11-slim
+```
+
+---
+
+# Meaning
+
+```text id="vjlwm1"
+Download image blueprint from Docker Hub.
+```
+
+---
+
+# What Happens Internally
+
+```text id="gtjlwm"
+Docker Client
+      ↓
+Contacts Docker Hub
+      ↓
+Downloads image layers
+      ↓
+Stores locally
+```
+
+---
+
+# Image Layers
+
+Images are built in layers:
+
+```text id="4vjlwm"
+Linux base
+    +
+Python runtime
+    +
+Libraries
+    +
+Your app code
+```
+
+Benefits:
+
+* caching
+* efficiency
+* faster rebuilds
+
+---
+
+# View Local Images
+
+## Syntax
+
+```bash id="95jlwm"
+docker images
+```
+
+---
+
+# Example Output
+
+```text id="jlwm94"
+REPOSITORY   TAG         IMAGE ID
+python       3.11-slim   abc123
+```
+
+---
+
+# 5. Running a Container
+
+---
+
+# Syntax
+
+```bash id="jlwm23"
+docker run -it IMAGE_NAME
+```
+
+Example:
+
+```bash id="jlwm66"
+docker run -it python:3.11-slim
+```
+
+---
+
+# Flag Meaning
+
+| Flag | Meaning          |
+| ---- | ---------------- |
+| -i   | interactive mode |
+| -t   | terminal access  |
+
+Combined:
+
+```bash id="jlwm11"
+-it
+```
+
+means:
+
+```text id="jlwm78"
+Attach interactive terminal to container.
+```
+
+---
+
+# What Happens Internally
+
+```text id="jlwm90"
+1. Docker takes image
+2. Creates writable layer
+3. Allocates resources
+4. Creates isolated environment
+5. Starts process
+6. Container becomes alive
+```
+
+---
+
+# 6. Container Lifecycle
+
+---
+
+# Lifecycle Diagram
+
+```text id="jlwm54"
+Image exists
+    ↓
+Container created
+    ↓
+Container running
+    ↓
+Container stopped
+    ↓
+Container removed
+```
+
+---
+
+# Important Commands
+
+---
+
+## View Running Containers
+
+```bash id="jlwm65"
+docker ps
+```
+
+---
+
+## View All Containers
+
+```bash id="jlwm67"
+docker ps -a
+```
+
+---
+
+## Stop Container
+
+```bash id="jlwm68"
+docker stop CONTAINER_ID
+```
+
+---
+
+## Start Existing Container
+
+```bash id="jlwm69"
+docker start -ai CONTAINER_ID
+```
+
+---
+
+## Remove Container
+
+```bash id="jlwm70"
+docker rm CONTAINER_ID
+```
+
+---
+
+# Important Concept
+
+## Stopped ≠ Removed
+
+| State   | Meaning             |
+| ------- | ------------------- |
+| Stopped | Exists but inactive |
+| Removed | Deleted completely  |
+
+---
+
+# 7. Temporary Nature of Containers
+
+Containers are designed to be:
+
+```text id="jlwm71"
+Disposable and replaceable
+```
+
+---
+
+# Writable Layer
+
+Containers have temporary writable storage.
+
+Example:
+
+Inside container:
+
+```bash id="jlwm72"
+touch hello.txt
+```
+
+If container gets removed:
+
+```bash id="jlwm73"
+docker rm container_id
+```
+
+then:
+
+```text id="jlwm74"
+hello.txt disappears
+```
+
+---
+
+# Why Docker Works This Way
+
+Modern cloud philosophy:
+
+```text id="jlwm75"
+If service breaks,
+destroy and recreate.
+```
+
+NOT:
+
+```text id="jlwm76"
+Repair machine manually forever.
+```
+
+---
+
+# Persistent Storage
+
+Permanent data is stored using:
+
+```text id="jlwm77"
+Volumes
+```
+
+Volumes survive container deletion.
+
+---
+
+# 8. Isolation in Containers
+
+Containers behave like:
+
+```text id="jlwm79"
+Tiny isolated computers
+```
+
+Each container gets isolated:
+
+* filesystem
+* processes
+* networking
+* ports
+* environment
+
+---
+
+# Why Isolation Matters
+
+Benefits:
+
+* reproducibility
+* security
+* scalability
+* dependency separation
+
+---
+
+# 9. Multiple Containers from One Image
+
+One image can create many containers.
+
+Example:
+
+```text id="jlwm80"
+python:3.11-slim
+      ↓
+Container A
+Container B
+Container C
+```
+
+Each independent.
+
+---
+
+# 10. Dockerfile Basics
+
+A Dockerfile defines how to build image.
+
+---
+
+# Basic Syntax
+
+```dockerfile id="jlwm81"
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY . .
+
+RUN pip install -r requirements.txt
+
+CMD ["python", "main.py"]
+```
+
+---
+
+# Dockerfile Instruction Breakdown
+
+---
+
+## FROM
+
+```dockerfile id="jlwm82"
+FROM python:3.11-slim
+```
+
+Base image.
+
+---
+
+## WORKDIR
+
+```dockerfile id="jlwm83"
+WORKDIR /app
+```
+
+Sets working directory inside container.
+
+Equivalent to:
+
+```bash id="jlwm84"
+cd /app
+```
+
+---
+
+## COPY
+
+```dockerfile id="jlwm85"
+COPY . .
+```
+
+Copies files into container.
+
+---
+
+## RUN
+
+```dockerfile id="jlwm86"
+RUN pip install -r requirements.txt
+```
+
+Runs command during image build.
+
+---
+
+## CMD
+
+```dockerfile id="jlwm87"
+CMD ["python", "main.py"]
+```
+
+Default startup command.
+
+Runs when container starts.
+
+---
+
+# 11. Building an Image
+
+---
+
+# Syntax
+
+```bash id="jlwm88"
+docker build -t IMAGE_NAME .
+```
+
+Example:
+
+```bash id="jlwm89"
+docker build -t myapp .
+```
+
+---
+
+# Meaning
+
+| Part  | Meaning           |
+| ----- | ----------------- |
+| build | create image      |
+| -t    | tag/name          |
+| .     | current directory |
+
+---
+
+# Build Flow
+
+```text id="jlwm91"
+Dockerfile
+      ↓
+Docker Engine
+      ↓
+Image built
+      ↓
+Stored locally
+```
+
+---
+
+# 12. Running Built Image
+
+---
+
+# Syntax
+
+```bash id="jlwm92"
+docker run IMAGE_NAME
+```
+
+Example:
+
+```bash id="jlwm93"
+docker run myapp
+```
+
+---
+
+# 13. Good Practices
+
+---
+
+# Use Slim Images
+
+Prefer:
+
+```text id="jlwm95"
+python:3.11-slim
+```
+
+instead of huge images.
+
+Benefits:
+
+* faster builds
+* smaller size
+* lower attack surface
+
+---
+
+# Keep Containers Stateless
+
+Do NOT rely on container internal storage.
+
+Use:
+
+* databases
+* volumes
+* cloud storage
+
+---
+
+# Rebuild Instead of Manual Fixes
+
+Good Docker mindset:
+
+```text id="jlwm96"
+Destroy and recreate cleanly.
+```
+
+NOT:
+
+```text id="jlwm97"
+Modify containers manually forever.
+```
+
+---
+
+# Use Version Tags
+
+GOOD:
+
+```text id="jlwm98"
+python:3.11-slim
+```
+
+BAD:
+
+```text id="jlwm99"
+python:latest
+```
+
+Reason:
+
+* reproducibility
+* predictable environments
+
+---
+
+# Keep Images Small
+
+Avoid unnecessary packages.
+
+Smaller images:
+
+* deploy faster
+* start faster
+* cost less
+
+---
+
+# 14. Important Production Mindset
+
+Containers are NOT virtual machines.
+
+Containers share host kernel but isolate processes.
+
+Containers are:
+
+```text id="jlwm100"
+Lightweight isolated runtime environments.
+```
+
+---
+
+# 15. Full Technical Flow
+
+---
+
+# Development Flow
+
+```text id="jlwm101"
+Write code
+    ↓
+Write Dockerfile
+    ↓
+Build image
+    ↓
+Run container
+    ↓
+Container executes app
+```
+
+---
+
+# Real Production Flow
+
+```text id="jlwm102"
+Developer builds image
+        ↓
+Pushes image to registry
+        ↓
+Cloud server pulls image
+        ↓
+Orchestrator creates containers
+        ↓
+Containers run service
+```
+
+---
+
+# 16. Essential Beginner Commands Cheat Sheet
+
+---
+
+## Pull Image
+
+```bash id="jlwm103"
+docker pull python:3.11-slim
+```
+
+---
+
+## List Images
+
+```bash id="jlwm104"
+docker images
+```
+
+---
+
+## Run Interactive Container
+
+```bash id="jlwm105"
+docker run -it python:3.11-slim
+```
+
+---
+
+## List Running Containers
+
+```bash id="jlwm106"
+docker ps
+```
+
+---
+
+## List All Containers
+
+```bash id="jlwm107"
+docker ps -a
+```
+
+---
+
+## Stop Container
+
+```bash id="jlwm108"
+docker stop CONTAINER_ID
+```
+
+---
+
+## Remove Container
+
+```bash id="jlwm109"
+docker rm CONTAINER_ID
+```
+
+---
+
+## Build Image
+
+```bash id="jlwm110"
+docker build -t myapp .
+```
+
+---
+
+## Run Image
+
+```bash id="jlwm111"
+docker run myapp
+```
+
+---
+
+# 17. Most Important Mindset Shift
+
+Old infrastructure mindset:
+
+```text id="jlwm112"
+Protect machine forever.
+```
+
+Modern container mindset:
+
+```text id="jlwm113"
+Containers are disposable workers.
+```
+
+That single idea is the foundation of modern cloud engineering, ML deployment, Kubernetes, and scalable backend systems.
