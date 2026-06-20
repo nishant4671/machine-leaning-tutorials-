@@ -1,5 +1,7 @@
 # 1. Use an official Python runtime as a parent image
-FROM python:3.9-slim
+FROM python:3.9-slim  
+
+#this is the base image for our Docker container, which includes Python 3.9 and is a slim version to reduce the image size.
 
 # 2. Set the working directory in the container
 WORKDIR /app
