@@ -16,3 +16,15 @@ This log is the source of truth for tracking progress across CLI sessions. At th
   - Decide which sub-unit of Module 0 to study today (e.g. 0.1, 0.2, etc.).
   - Review the theory resources and complete the corresponding exercises.
 
+### [2026-07-10] - Warmup Completed & Production Roadmapping
+- **Status:** Transitioning to Module 1 (Tabular ML & Production Delivery)
+- **Current Focus:** Elevating housing predictor API to production standards
+- **Accomplished Today:**
+  - Reviewed the housing project warmup (Flask + LinearRegression + joblib + my_learnings notes).
+  - Identified the missing `model.fit(X, y)` training bug.
+  - Aligned on the next steps to reach production standards.
+  - Updated the active state in `session-state.md`.
+- **Next Steps:**
+  - Fix the training script bug and build the scikit-learn Pipeline with scaling and hyperparameter tuning.
+  - Rewrite the API in FastAPI with Pydantic validation.
+
