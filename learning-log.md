@@ -28,3 +28,13 @@ This log is the source of truth for tracking progress across CLI sessions. At th
   - Fix the training script bug and build the scikit-learn Pipeline with scaling and hyperparameter tuning.
   - Rewrite the API in FastAPI with Pydantic validation.
 
+### [2026-07-17] - sklearn Production Training Pipeline Refactored
+- **Status:** Module 1: Tabular ML (In Progress)
+- **Current Focus:** Upgrading train_model.py and transitioning Flask to FastAPI
+- **Accomplished Today:**
+  - Refactored `01-Tabular-ML/housing_project/train_model.py` to use a 3-step scikit-learn Pipeline: StandardScaler, PolynomialFeatures (degree=2, include_bias=False), and Ridge regression.
+  - Set up `GridSearchCV` with 5-fold cross-validation (`cv=5`) to search across Ridge alpha parameters ([0.1, 1.0, 10.0, 100.0]).
+  - Extracted the best-performing pipeline and saved it to `house_model.joblib`.
+  - Confirmed the model trains and saves successfully.
+- **Next Steps:**
+  - Refactor `01-Tabular-ML/housing_project/app.py` from Flask to a production-ready FastAPI app with Pydantic validation schemas.
