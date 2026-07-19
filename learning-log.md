@@ -37,4 +37,13 @@ This log is the source of truth for tracking progress across CLI sessions. At th
   - Extracted the best-performing pipeline and saved it to `house_model.joblib`.
   - Confirmed the model trains and saves successfully.
 - **Next Steps:**
-  - Refactor `01-Tabular-ML/housing_project/app.py` from Flask to a production-ready FastAPI app with Pydantic validation schemas.
+  - Refactor `01-Tabular-ML/housing_project/app.py` from Flask to a production-ready FastAPI app with Pydantic validation schemas. (Paused)
+
+### [2026-07-19] - Pivoting to NLP & MLOps
+- **Status:** Module 2: NLP & MLOps Fundamentals
+- **Current Focus:** Module 2 Overview & Pre-Flight
+- **Accomplished Today:**
+  - Shifted focus to `02-NLP-MLOps` directory.
+- **Next Steps:**
+  - Start exploring the Pre-Flight-Study material.
+  - Review MLOps best practices (MLflow, DVC, data drift) for the Spam Classifier Project.
